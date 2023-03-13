@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package protoGrpc.user;
+
+import "google/protobuf/empty.proto";
+
+option java_multiple_files = true;
+option java_package = "protoGrpc.lib.user";
+
+
+message User {
+  string userName = 1;
+}
+
+message Empty {}
+
+service UserService {
+  rpc CreateUser(User) returns (User);
+
+  rpc DeleteUser(User) returns (google.protobuf.Empty);
+
+  rpc getUser(User) returns (User);
+
+  rpc getAllUsers(google.protobuf.Empty) returns (stream User);
+}

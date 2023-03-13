@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package protoGrpc.chatRoom;
+
+import "google/protobuf/empty.proto";
+import "user.proto";
+
+option java_multiple_files = true;
+option java_package = "protoGrpc.lib.chatRoom";
+
+message Group {
+  repeated protoGrpc.user.User members = 1;
+}
+
+message ChatRoomId {
+  int32 id = 1;
+}
+
+message ChatRoom {
+  ChatRoomId id = 1;
+  Group group = 2;
+}
+
+message RoomModifier {
+  protoGrpc.user.User user = 1;
+  ChatRoomId roomId = 2;
+}
+
+service ChatRoomService {
+  rpc CreateUserChat(Group) returns (ChatRoomId);
+
+  rpc CreateGroupChat(Group) returns (ChatRoomId);
+
+  rpc AddUserToGroupChat(RoomModifier) returns (google.protobuf.Empty);
+
+  rpc RemoveUserFromGroupChat(RoomModifier) returns (google.protobuf.Empty);
+
+  rpc GetChatRoomMembers(ChatRoomId) returns (Group);
+
+  rpc GetAllChatRooms(google.protobuf.Empty) returns (stream ChatRoom);
+
+  rpc GetAllChatRoomsOfUser(protoGrpc.user.User) returns (stream ChatRoom);
+
+  rpc DeleteUserChat(ChatRoomId) returns (google.protobuf.Empty);
+
+  rpc DeleteGroupChat(ChatRoomId) returns (google.protobuf.Empty);
+}
